@@ -1,3 +1,4 @@
+import ast
 import logging
 import os
 import json
@@ -59,18 +60,27 @@ def get_config(key: str):
 
 
 def set_config(key: str, value: Any):
+    logger = logging.getLogger("set-config")
     conf = CONFIG
     try:
         for subkey in key.split(".")[:1]:
             conf = conf[subkey]
         last_key = key.split(".")[-1]
-        assert type(conf[last_key]) == type(value), "Cannot assign '{}' to '{}'".format(repr(type(conf[last_key])), repr(type(value)))
+        if type(conf[last_key]) != type(value):
+            value = ast.literal_eval(value)
+            assert type(value) != str,"Cannot assign '{}' to '{}'".format(repr(type(conf[last_key])), repr(type(value)))
         conf[last_key] = value
         return True
     except AssertionError:
         raise
-    except Exception:
+    except Exception as e:
+        logger.info("Exception raised: {}".format(str(e)))
         return False
+
+
+def update_conf_file():
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(CONFIG, f, indent=4)
 
 
 def configure_root_logger():

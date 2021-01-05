@@ -8,7 +8,7 @@ from collections import namedtuple
 from pprint import pprint
 from typing import Dict
 
-from warden import HOSTS_FILE, configure_root_logger, LOG_PATH, get_config, set_config
+from warden import HOSTS_FILE, configure_root_logger, LOG_PATH, get_config, set_config, update_conf_file
 
 AddHost = namedtuple("AddHost", "name host user threshold disks")
 RemoveHost = namedtuple("RemoveHost", "name")
@@ -159,7 +159,7 @@ def set_conf(action: EditConfig):
             print("Config not found: {}".format(action.key))
             logger.info("Config not found: {}".format(action.key))
     except AssertionError as ae:
-        print("Type mismatch: {}", str(ae))
+        print("Type mismatch: {}".format(str(ae)))
 
 
 def show_logs():
@@ -184,7 +184,15 @@ def configure():
             remove_host(hosts, RemoveHost(name=args.name))
         elif args.subcommand == "get-host":
             get_host(hosts, GetHost(name=args.name))
+        elif args.subcommand == "edit-host":
+            edit_host(hosts, EditHost(name=args.name, host=args.host, user=args.user, threshold=args.threshold,
+                                      disks=args.disks))
+        elif args.subcommand == "get-conf":
+            get_conf(GetConfig(key=args.key))
+        elif args.subcommand == "set-conf":
+            set_conf(EditConfig(key=args.key, value=args.value))
 
+        update_conf_file()
         set_hosts(hosts)
     except Exception:
         logger.exception("Exception raised")
