@@ -1,0 +1,22 @@
+{
+    "hosts": [
+        {
+            "name": "master",
+            "host": "192.168.13.6",
+            "user": "ubuntu",
+            "disks": [
+                "vda1"
+            ],
+            "threshold": 80
+        },
+        {
+            "name": "master2",
+            "host": "192.168.13.6",
+            "user": "ubuntu",
+            "disks": [
+                "vda2"
+            ],
+            "threshold": "10"
+        }
+    ]
+}

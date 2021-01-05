@@ -1,0 +1,8 @@
+{
+    "mail": {
+        "host":"",
+        "port": "",
+        "user": "",
+        "password": ""
+    }
+}
