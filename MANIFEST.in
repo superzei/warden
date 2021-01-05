@@ -1,1 +1,2 @@
 include warden/etc/hosts.json
+include warden/etc/config.json

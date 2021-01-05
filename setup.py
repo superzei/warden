@@ -17,7 +17,9 @@ setup(
     include_package_data=True,
     entry_points={
         "console_scripts": [
-            "warden=warden.__main__:main"
+            "warden=warden.__main__:main",
+            "warden-configure=warden.configure:configure",
+            "warden-logs:warden.configure:show_logs"
         ]
     },
     requirements=requirements

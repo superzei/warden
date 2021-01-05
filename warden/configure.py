@@ -1,11 +1,14 @@
 import argparse
 import json
 import logging
+import os
+import shlex
+import subprocess
 from collections import namedtuple
 from pprint import pprint
 from typing import Dict
 
-from warden import HOSTS_FILE, configure_root_logger
+from warden import HOSTS_FILE, configure_root_logger, LOG_PATH
 
 AddHost = namedtuple("AddHost", "name host user threshold disks")
 RemoveHost = namedtuple("RemoveHost", "name")
@@ -118,6 +121,13 @@ def get_conf(hosts: Dict, action: GetConfig):
 
 def set_conf(hosts: Dict, action: EditConfig):
     pass
+
+
+def show_logs():
+    if not os.path.exists(LOG_PATH):
+        print("Couldn't find the log on: {}".format(LOG_PATH))
+        return
+    subprocess.call(shlex.split("less {}".format(LOG_PATH)), stdin=subprocess.PIPE)
 #########################
 
 
