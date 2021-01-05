@@ -48,6 +48,7 @@ def check(hosts: List[Host]) -> List[Notification]:
                 continue
     return notifications
 
+
 def main():
     configure_root_logger()
     notifications = check(HOSTS)

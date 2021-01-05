@@ -80,7 +80,13 @@ def find_host(hosts: Dict, name: str):
 def add_host(hosts: Dict, action: AddHost):
     logger = logging.getLogger("add-host")
     new_host = {"name":  action.name, "host": action.host, "user": action.user, "disks": action.disks, "threshold": action.threshold}
-    logger.info("Adding a new host. {}".format(str(new_host)))
+    host = find_host(hosts["hosts"], action.name)
+    if host:
+        print("Host already exists: {}".format(action.name))
+        logger.warning("Host exists: {}".format(action.name))
+        return
+    else:
+        logger.info("Adding a new host. {}".format(str(new_host)))
     hosts["hosts"].append(new_host)
     logger.info("Host '{}' added".format(action.name))
 

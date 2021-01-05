@@ -49,6 +49,9 @@ with open(HOSTS_FILE) as f:
 
 def configure_root_logger():
     root = logging.getLogger()
+    root.setLevel(logging.INFO)
     root.handlers = []
+    file_formatter = logging.Formatter("[%(asctime)s] | %(name)-15s | %(levelname)-8s %(message)s")
     file_handler = RotatingFileHandler(LOG_PATH, maxBytes=5000)
+    file_handler.setFormatter(file_formatter)
     root.addHandler(file_handler)
