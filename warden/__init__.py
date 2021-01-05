@@ -5,7 +5,7 @@ import json
 from dataclasses import dataclass
 from collections import namedtuple
 from logging.handlers import RotatingFileHandler
-from typing import List
+from typing import List, Any
 
 PATH = os.path.split(os.path.abspath(__file__))[0]
 HOSTS_FILE = os.path.join(PATH, "etc", "hosts.json")
@@ -36,16 +36,37 @@ class Host:
 @dataclass
 class Notification:
     host: str
+    threshold: int
     disks: List[DiskUsage]
 
     @staticmethod
     def from_disk(host: Host, disks: List[DiskUsage]):
-        return Notification(host=host.name, disks=disks)
+        return Notification(host=host.name, threshold=host.threshold, disks=disks)
 
 
 with open(HOSTS_FILE) as f:
     HOSTS = [Host.parse_from(c) for c in json.load(f)["hosts"]]
 
+
+def get_config(key: str):
+    conf = CONFIG
+    try:
+        for subkey in key.split("."):
+            conf = conf[subkey]
+        return conf
+    except Exception:
+        return None
+
+
+def set_config(key: str, value: Any):
+    conf = CONFIG
+    try:
+        for subkey in key.split(".")[:1]:
+            conf = conf[subkey]
+        conf[key.split(".")[-1]] = value
+        return True
+    except Exception:
+        return False
 
 def configure_root_logger():
     root = logging.getLogger()
