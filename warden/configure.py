@@ -8,7 +8,7 @@ from collections import namedtuple
 from pprint import pprint
 from typing import Dict
 
-from warden import HOSTS_FILE, configure_root_logger, LOG_PATH
+from warden import HOSTS_FILE, configure_root_logger, LOG_PATH, get_config, set_config
 
 AddHost = namedtuple("AddHost", "name host user threshold disks")
 RemoveHost = namedtuple("RemoveHost", "name")
@@ -106,21 +106,60 @@ def remove_host(hosts: Dict, action: RemoveHost):
 
 
 def get_host(hosts: Dict, action: GetHost):
+    logger = logging.getLogger("get-host")
+    logger.info("Listing host: {}".format(action.name))
     host = find_host(hosts["hosts"], action.name)
     if host:
         pprint(host)
+        logger.info("Host info: {}".format(str(host)))
+    else:
+        logger.warning("Host not found: {}".format(action.name))
+        print("Host not found: {}".format(action.name))
 
 
 def edit_host(hosts: Dict, action: EditHost):
-    pass
+    logger = logging.getLogger("edit-host")
+    logger.info("Editing host: {}".format(action.name))
+    host = find_host(hosts["hosts"], action.name)
+    if host:
+        logger.info("Before: {}".format(str(host)))
+        if action.host:
+            logger.info("Editing host name")
+            host["host"] = action.host
+        if action.user:
+            logger.info("Editing user name")
+            host["user"] = action.user
+        if action.threshold:
+            logger.info("Editing threshold")
+            host["threshold"] = action.threshold
+        if action.disks:
+            logger.info("Editing disks")
+            host["disks"] = action.disks
+        logger.info("After: {}".format(str(host)))
+    else:
+        logger.warning("Host not found: {}".format(action.name))
+        print("Couldn't find given host: {}".format(action.name))
 
 
-def get_conf(hosts: Dict, action: GetConfig):
-    pass
+def get_conf(action: GetConfig):
+    logger = logging.getLogger("get-config")
+    logger.info("Getting config for: {}".format(action.key))
+    value = get_config(action.key)
+    print("{}={}".format(action.key, value))
+    logger.info("{}={}".format(action.key, value))
 
 
-def set_conf(hosts: Dict, action: EditConfig):
-    pass
+def set_conf(action: EditConfig):
+    logger = logging.getLogger("set-config")
+    logger.info("Setting config '{}' to '{}'".format(action.key, action.value))
+    try:
+        if set_config(action.key, action.value):
+            logger.info("Config set: {}={}".format(action.key, action.value))
+        else:
+            print("Config not found: {}".format(action.key))
+            logger.info("Config not found: {}".format(action.key))
+    except AssertionError as ae:
+        print("Type mismatch: {}", str(ae))
 
 
 def show_logs():

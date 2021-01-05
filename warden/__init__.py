@@ -63,10 +63,15 @@ def set_config(key: str, value: Any):
     try:
         for subkey in key.split(".")[:1]:
             conf = conf[subkey]
-        conf[key.split(".")[-1]] = value
+        last_key = key.split(".")[-1]
+        assert type(conf[last_key]) == type(value), "Cannot assign '{}' to '{}'".format(repr(type(conf[last_key])), repr(type(value)))
+        conf[last_key] = value
         return True
+    except AssertionError:
+        raise
     except Exception:
         return False
+
 
 def configure_root_logger():
     root = logging.getLogger()
