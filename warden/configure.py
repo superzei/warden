@@ -28,7 +28,7 @@ def parse_args() -> argparse.Namespace:
     add_host_parser.add_argument("name", help="Host name to add.")
     add_host_parser.add_argument("host", help="Address/hostname of the host.")
     add_host_parser.add_argument("user", help="User of host.")
-    add_host_parser.add_argument("threshold", help="Disk threshold to check against.")
+    add_host_parser.add_argument("threshold", help="Disk threshold to check against.", type=int)
     add_host_parser.add_argument("disks", nargs="+", help="Name of disks will be checked, can be '/dev/X' or 'X' format")
 
     # remove-host subparser
@@ -44,7 +44,7 @@ def parse_args() -> argparse.Namespace:
     edit_host_parser.add_argument("name", help="Name of the host to edit")
     edit_host_parser.add_argument("--host", required=False, help="New host address")
     edit_host_parser.add_argument("--user", required=False, help="New username")
-    edit_host_parser.add_argument("--threshold", required=False, help="New threshold value")
+    edit_host_parser.add_argument("--threshold", required=False, help="New threshold value", type=int)
     edit_host_parser.add_argument("--disks", required=False, nargs="+", help="Set disks")
 
     # set-conf

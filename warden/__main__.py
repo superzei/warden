@@ -53,7 +53,7 @@ def check(hosts: List[Host]) -> List[Notification]:
             con = Connection(host=host.host, user=host.user)
             result = con.run("df -h", hide=True)
         except Exception as e:
-            print("Unable to run commands on {}: {}", host.name, str(e))
+            print("Unable to run commands on {}: {}".format(host.name, str(e)))
             continue
         else:
             if result.ok:

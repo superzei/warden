@@ -4,7 +4,7 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 with open("requirements.txt", "r") as f:
-    requirements = f.read()
+    requirements = f.read().splitlines()
 
 setup(
     name="ulak-warden",
@@ -22,5 +22,5 @@ setup(
             "warden-logs=warden.configure:show_logs"
         ]
     },
-    requirements=requirements
+    install_requires=requirements
 )
