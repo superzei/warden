@@ -1,4 +1,8 @@
 .idea/
 *.log
+build/
+dist/
+*.egg-info/
+
 config.json
 hosts.json
