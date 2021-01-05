@@ -19,7 +19,7 @@ setup(
         "console_scripts": [
             "warden=warden.__main__:main",
             "warden-configure=warden.configure:configure",
-            "warden-logs:warden.configure:show_logs"
+            "warden-logs=warden.configure:show_logs"
         ]
     },
     requirements=requirements
